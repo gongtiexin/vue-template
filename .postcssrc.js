@@ -1,10 +1,15 @@
-// https://github.com/michael-ciniawsky/postcss-load-config
+/**
+ * Date              Author           Des
+ *----------------------------------------------
+ * 18-3-22           gongtiexin       postcss config
+ * */
 
 module.exports = {
-  "plugins": {
-    "postcss-import": {},
-    "postcss-url": {},
-    // to edit target browsers: use "browserslist" field in package.json
-    "autoprefixer": {}
-  }
-}
+  plugins: {
+    "postcss-cssnext": {},
+    "css-declaration-sorter": {
+      order: "concentric-css",
+    },
+    "css-mqpacker": {},
+  },
+};
