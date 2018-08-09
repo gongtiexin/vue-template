@@ -48,20 +48,20 @@ module.exports = {
         use: "happypack/loader?id=babel",
       },
       {
-        test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"],
-      },
-      {
-        test: /\.less$/i,
+        test: /\.less|css$/,
         use: [
           MiniCssExtractPlugin.loader,
           "css-loader",
           "postcss-loader",
           {
+            loader: "px2rem-loader",
+            options: {
+              remUnit: config.webpack.remUnit,
+            },
+          },
+          {
             loader: "less-loader",
             options: {
-              // less@3
-              javascriptEnabled: true,
               // 覆盖antd样式的全局变量
               modifyVars: config.modifyVars,
             },

@@ -19,8 +19,9 @@
     [
       "import",
       {
-        "libraryName": "iview",
-        "libraryDirectory": "src/components"
+        "libraryName": "vant",
+        "libraryDirectory": "es",
+        "style": true
       }
     ],
     "transform-vue-jsx"

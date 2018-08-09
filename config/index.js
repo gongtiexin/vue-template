@@ -1,7 +1,7 @@
 /**
  * Date              Author           Des
  *----------------------------------------------
- * 18-3-22           gongtiexin       配置参数
+ * 18-8-9            gongtiexin       配置参数
  * */
 
 const path = require("path");
@@ -41,6 +41,7 @@ module.exports = {
       },
     },
     publicPath: "/",
+    remUnit: 37.5,
   },
   path: {
     entry,

@@ -64,6 +64,12 @@ module.exports = {
             loader: "css-loader",
           },
           {
+            loader: "px2rem-loader",
+            options: {
+              remUnit: config.webpack.remUnit,
+            },
+          },
+          {
             loader: "less-loader",
             options: {
               // less@3
