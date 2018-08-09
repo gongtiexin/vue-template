@@ -1,44 +1,65 @@
 // https://eslint.org/docs/user-guide/configuring
 
-module.exports = {
-  root: true,
-  parserOptions: {
-    parser: "babel-eslint",
+{
+  "root": true,
+  "parserOptions": {
+    "parser": "babel-eslint"
   },
-  env: {
-    browser: true,
+  "env": {
+    "browser": true
   },
   // https://github.com/vuejs/eslint-plugin-vue#priority-a-essential-error-prevention
   // consider switching to `plugin:vue/strongly-recommended` or `plugin:vue/recommended` for stricter rules.
-  extends: ["plugin:vue/essential", "airbnb-base", "plugin:prettier/recommended"],
+  "extends": [
+    "plugin:vue/essential",
+    "airbnb-base",
+    "plugin:prettier/recommended"
+  ],
   // required to lint *.vue files
-  plugins: ["vue"],
+  "plugins": [
+    "vue"
+  ],
   // add your custom rules here
-  rules: {
-    "prettier/prettier": ["error", { trailingComma: "es5", printWidth: "100" }],
+  "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "trailingComma": "es5",
+        "printWidth": "100"
+      }
+    ],
     // don't require .vue extension when importing
     "import/extensions": [
       "off",
       "always",
       {
-        js: "never",
-        vue: "never",
-      },
+        "js": "never",
+        "vue": "never"
+      }
     ],
-    "import/no-unresolved": [0, { commonjs: true, amd: true }],
+    "import/no-unresolved": [
+      0,
+      {
+        "commonjs": true,
+        "amd": true
+      }
+    ],
     // disallow reassignment of function parameters
     // disallow parameter object manipulation except for specific exclusions
     "no-param-reassign": [
       "error",
       {
-        props: true,
-        ignorePropertyModificationsFor: [
-          "state", // for vuex state
-          "acc", // for reduce accumulators
-          "e", // for e.returnvalue
-        ],
-      },
-    ],
+        "props": true,
+        "ignorePropertyModificationsFor": [
+          "state",
+          // for vuex state
+          "acc",
+          // for reduce accumulators
+          "e"
+          // for e.returnvalue
+        ]
+      }
+    ]
     // allow optionalDependencies
     // "import/no-extraneous-dependencies": [
     //   "error",
@@ -46,7 +67,5 @@ module.exports = {
     //     optionalDependencies: ["test/unit/index.js"],
     //   },
     // ],
-    // allow debugger during development
-    "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
-  },
-};
+  }
+}

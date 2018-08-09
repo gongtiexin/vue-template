@@ -1,6 +1,6 @@
 import Vue from "vue";
 import moment from "moment";
-import App from "./App";
+import App from "./components/app/app";
 import router from "./router";
 import store from "./store";
 import "normalize.css";

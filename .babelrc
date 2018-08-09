@@ -23,7 +23,6 @@
         "libraryDirectory": "src/components"
       }
     ],
-    "transform-vue-jsx",
-    "transform-runtime"
+    "transform-vue-jsx"
   ]
 }
