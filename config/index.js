@@ -4,43 +4,60 @@
  * 18-3-22           gongtiexin       配置参数
  * */
 
-const path = require("path");
+const path = require('path');
 
-const entry = path.resolve(__dirname, "../src/index");
-const indexHtml = path.resolve(__dirname, "../index.html");
-const root = path.resolve(__dirname, "../");
-const srcPath = path.resolve(__dirname, "../src");
-const distPath = path.resolve(__dirname, "../dist");
-const staticPath = path.resolve(__dirname, "../static");
-const distStaticPath = path.resolve(__dirname, "../dist/static");
-const nodeModulesPath = path.resolve(__dirname, "../node_modules");
+const entry = path.resolve(__dirname, '../src/index');
+const indexHtml = path.resolve(__dirname, '../index.html');
+const root = path.resolve(__dirname, '../');
+const srcPath = path.resolve(__dirname, '../src');
+const distPath = path.resolve(__dirname, '../dist');
+const staticPath = path.resolve(__dirname, '../static');
+const distStaticPath = path.resolve(__dirname, '../dist/static');
+const nodeModulesPath = path.resolve(__dirname, '../node_modules');
+
+// alias
+const componentsPath = path.resolve(__dirname, '../src/components');
+const pagesPath = path.resolve(__dirname, '../src/pages');
+const utilsPath = path.resolve(__dirname, '../src/utils');
 
 module.exports = {
+  root,
   webpack: {
     build: {
       env: {
-        NODE_ENV: "production",
+        NODE_ENV: 'production',
       },
-      vendor: ["babel-polyfill", "vue", "vuex", "vue-router"],
+      vendor: ['vue', 'vue-router', 'vuex'],
       plugins: {
         CopyWebpackPlugin: [
           {
             from: staticPath,
             to: distStaticPath,
-            ignore: ["html/loading/*.*", "mdIconfont/*.*"],
           },
         ],
       },
     },
     dev: {
       env: {
-        NODE_ENV: "development",
+        NODE_ENV: 'development',
       },
       devServer: {
         port: 3000,
       },
     },
-    publicPath: "/",
+    publicPath: '/',
+    resolve: {
+      extensions: ['.js', '.vue'],
+      modules: ['node_modules'],
+      alias: {
+        '@components': componentsPath,
+        '@pages': pagesPath,
+        '@utils': utilsPath,
+      },
+    },
+    modifyVars: {
+      // "primary-color": "#1890ff",
+    },
   },
   path: {
     entry,
@@ -51,6 +68,4 @@ module.exports = {
     distStaticPath,
     nodeModulesPath,
   },
-  root,
-  modifyVars: {},
 };

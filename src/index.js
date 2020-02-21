@@ -1,22 +1,19 @@
-import Vue from "vue";
-import moment from "moment";
-import App from "./components/app/app";
-import router from "./router";
-import store from "./store";
-import "normalize.css";
+import Vue from 'vue';
+import App from './App';
+import router from './router';
+import store from './store';
+import moment from 'moment';
+import 'normalize.css';
 
 /**
  * moment时区设置为中国
  */
-moment.locale("zh-cn");
+moment.locale('zh-cn');
 
 Vue.config.productionTip = false;
 
-/* eslint-disable no-new */
 new Vue({
-  el: "#app",
   router,
   store,
-  components: { App },
-  template: "<App/>",
-});
+  render: h => h(App),
+}).$mount('#root');

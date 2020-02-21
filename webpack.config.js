@@ -4,28 +4,29 @@
  * 18-3-22           gongtiexin       webpack开发环境配置
  * */
 
-const webpack = require("webpack");
-const HappyPack = require("happypack");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const VueLoaderPlugin = require("vue-loader/lib/plugin");
-const config = require("./config/index");
+const webpack = require('webpack');
+const HappyPack = require('happypack');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const config = require('./config');
 
-const proxy = process.env.DEV_PROXY || "192.168.32.101";
+const proxy = process.env.DEV_PROXY || '192.168.32.101';
 
 module.exports = {
-  mode: "development",
-  entry: ["babel-polyfill", config.path.entry],
+  mode: 'development',
+  resolve: config.webpack.resolve,
+  entry: config.path.entry,
   devServer: {
     hot: true,
     contentBase: config.root,
     port: config.webpack.dev.devServer.port,
-    host: "0.0.0.0",
-    publicPath: "/",
+    host: '0.0.0.0',
+    publicPath: '/',
     historyApiFallback: true,
     disableHostCheck: true,
     proxy: {
-      "/inapi": {
-        target: `http://${proxy}:20111`,
+      '/api': {
+        target: `https://unidemo.dcloud.net.cn`,
         changeOrigin: true,
       },
     },
@@ -33,85 +34,88 @@ module.exports = {
   output: {
     path: config.path.distPath,
     publicPath: config.webpack.publicPath,
-    filename: "app.[hash].js",
+    filename: 'app.[hash].js',
   },
-  devtool: "cheap-module-eval-source-map",
-  resolve: {
-    extensions: [".js", ".vue", ".json"],
-    alias: {
-      vue$: "vue/dist/vue.esm.js",
-    },
-    modules: [config.path.nodeModulesPath],
-  },
+  devtool: 'cheap-module-eval-source-map',
   module: {
     rules: [
       {
         test: /\.vue$/,
-        loader: "vue-loader",
+        loader: 'vue-loader',
+        options: {
+          loaders: {
+            use: 'happypack/loader?id=babel',
+          },
+        },
       },
       {
         test: /\.js$/,
-        exclude: /node_modules/,
-        use: "happypack/loader?id=babel",
+        use: 'happypack/loader?id=babel',
+        exclude: config.path.nodeModulesPath,
       },
       {
         test: /\.less|css$/,
         use: [
           {
-            loader: "vue-style-loader",
+            loader: 'style-loader',
           },
           {
-            loader: "css-loader",
+            loader: 'css-loader',
           },
           {
-            loader: "less-loader",
+            loader: 'less-loader',
             options: {
               // less@3
               javascriptEnabled: true,
               // 覆盖antd样式的全局变量
-              modifyVars: config.modifyVars,
+              modifyVars: config.webpack.modifyVars,
             },
           },
         ],
       },
+      // 处理图片(file-loader来处理也可以，url-loader更适合图片)
       {
-        test: /\.(jpe?g|png|gif|svg)$/i,
-        use: [
-          "file-loader?hash=sha512&digest=hex&name=[hash].[ext]",
-          // {
-          //   loader: "image-webpack-loader",
-          //   options: {
-          //     progressive: true,
-          //     optimizationLevel: 7,
-          //     interlaced: false,
-          //     pngquant: {
-          //       quality: "65-90",
-          //       speed: 4,
-          //     },
-          //   },
-          // },
-        ],
+        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          name: 'static/assets/images/[name].[hash:7].[ext]',
+        },
       },
+      // 处理多媒体文件
       {
-        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        use: "url-loader?limit=10000&mimetype=application/font-woff",
+        test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          name: 'static/assets/media/[name].[hash:7].[ext]',
+        },
       },
+      // 处理字体文件
       {
-        test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        use: "file-loader",
+        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          name: 'static/assets/fonts/[name].[hash:7].[ext]',
+        },
       },
     ],
   },
   plugins: [
+    new VueLoaderPlugin(),
     // 多进程
     new HappyPack({
-      id: "babel",
-      loaders: ["babel-loader"],
+      id: 'babel',
+      loaders: ['babel-loader'],
     }),
     // 热更新
     new webpack.HotModuleReplacementPlugin(),
-    new VueLoaderPlugin(),
     // html模板
-    new HtmlWebpackPlugin({ hash: false, template: config.path.indexHtml }),
+    new HtmlWebpackPlugin({
+      hash: false,
+      template: config.path.indexHtml,
+      title: 'react-template',
+    }),
   ],
 };

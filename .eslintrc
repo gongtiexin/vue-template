@@ -1,71 +1,27 @@
-// https://eslint.org/docs/user-guide/configuring
-
 {
-  "root": true,
-  "parserOptions": {
-    "parser": "babel-eslint"
-  },
   "env": {
-    "browser": true
+    "browser": true,
+    "node": true
   },
-  // https://github.com/vuejs/eslint-plugin-vue#priority-a-essential-error-prevention
-  // consider switching to `plugin:vue/strongly-recommended` or `plugin:vue/recommended` for stricter rules.
-  "extends": [
-    "plugin:vue/essential",
-    "airbnb-base",
-    "plugin:prettier/recommended"
-  ],
-  // required to lint *.vue files
-  "plugins": [
-    "vue"
-  ],
-  // add your custom rules here
+  "extends": ["plugin:vue/recommended", "plugin:prettier/recommended"],
+  "parser": "vue-eslint-parser",
+  "parserOptions": {
+    "parser": "babel-eslint",
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "legacyDecorators": true
+    }
+  },
   "rules": {
     "prettier/prettier": [
       "error",
       {
-        "trailingComma": "es5",
-        "printWidth": "100"
+        "singleQuote": true,
+        "trailingComma": "all",
+        "printWidth": 100,
+        "proseWrap": "never"
       }
     ],
-    // don't require .vue extension when importing
-    "import/extensions": [
-      "off",
-      "always",
-      {
-        "js": "never",
-        "vue": "never"
-      }
-    ],
-    "import/no-unresolved": [
-      0,
-      {
-        "commonjs": true,
-        "amd": true
-      }
-    ],
-    // disallow reassignment of function parameters
-    // disallow parameter object manipulation except for specific exclusions
-    "no-param-reassign": [
-      "error",
-      {
-        "props": true,
-        "ignorePropertyModificationsFor": [
-          "state",
-          // for vuex state
-          "acc",
-          // for reduce accumulators
-          "e"
-          // for e.returnvalue
-        ]
-      }
-    ]
-    // allow optionalDependencies
-    // "import/no-extraneous-dependencies": [
-    //   "error",
-    //   {
-    //     optionalDependencies: ["test/unit/index.js"],
-    //   },
-    // ],
+    "vue/max-attributes-per-line": 0
   }
 }

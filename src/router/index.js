@@ -1,16 +1,14 @@
-import Vue from "vue";
-import Router from "vue-router";
+import Vue from 'vue';
+import Router from 'vue-router';
 
 Vue.use(Router);
 
 export default new Router({
-  mode: "history",
+  mode: 'history',
   routes: [
     {
-      path: "/",
-      name: "HelloWorld",
-      component: () =>
-        import(/* webpackChunkName: "route-HelloWorld" */ "../components/hello-world"),
+      path: '/',
+      component: () => import(/* webpackChunkName: "route-a" */ '../pages/hello-world'),
     },
   ],
 });
