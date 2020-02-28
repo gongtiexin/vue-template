@@ -118,6 +118,7 @@ const request = ({ config, success, error }) =>
       if (error) {
         Notification.error(error);
       }
+
       return Promise.reject(response);
     },
   );

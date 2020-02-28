@@ -4,6 +4,7 @@ import router from './router';
 import store from './store';
 import moment from 'moment';
 import 'normalize.css';
+import xml2js from '@utils/xml2js';
 
 /**
  * moment时区设置为中国

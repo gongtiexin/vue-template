@@ -45,7 +45,7 @@
   "license": "ISC",
   "devDependencies": {
     "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.8.4",
+    "@babel/core": "^7.8.6",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/plugin-proposal-decorators": "^7.8.3",
     "@babel/plugin-proposal-export-default-from": "^7.8.3",
@@ -60,8 +60,8 @@
     "@babel/plugin-proposal-throw-expressions": "^7.8.3",
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
     "@babel/plugin-syntax-import-meta": "^7.8.3",
-    "@babel/preset-env": "^7.8.4",
-    "babel-eslint": "^10.0.3",
+    "@babel/preset-env": "^7.8.6",
+    "babel-eslint": "^10.1.0",
     "babel-loader": "^8.0.6",
     "babel-plugin-component": "^1.1.1",
     "babel-plugin-import": "^1.13.0",
@@ -69,8 +69,12 @@
     "css-loader": "^3.4.2",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.0",
+    "eslint-config-standard": "^14.1.0",
     "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
     "eslint-plugin-vue": "^6.2.1",
     "file-loader": "^5.1.0",
     "happypack": "^5.0.0",
@@ -104,7 +108,7 @@
     "element-ui": "^2.13.0",
     "enquire.js": "^2.1.6",
     "http-status-codes": "^1.4.0",
-    "lint-staged": "^10.0.7",
+    "lint-staged": "^10.0.8",
     "lodash": "^4.17.11",
     "moment": "^2.22.2",
     "normalize.css": "^8.0.1",
@@ -114,7 +118,8 @@
     "shortid": "^2.2.15",
     "up-utils": "3.7.0",
     "vue": "^2.6.11",
-    "vue-router": "^3.1.5",
-    "vuex": "^3.1.2"
+    "vue-router": "^3.1.6",
+    "vuex": "^3.1.2",
+    "xml2js": "^0.4.23"
   }
 }
