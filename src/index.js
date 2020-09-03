@@ -2,19 +2,19 @@ import Vue from 'vue';
 import App from './App';
 import router from './router';
 import store from './store';
-import moment from 'moment';
+import '@src/plugins';
+import * as dayjs from 'dayjs';
+import 'dayjs/locale/zh-cn';
 import 'normalize.css';
-import xml2js from '@utils/xml2js';
 
-/**
- * moment时区设置为中国
- */
-moment.locale('zh-cn');
+dayjs.locale('zh-cn');
 
 Vue.config.productionTip = false;
 
+Vue.prototype.$moment = dayjs;
+
 new Vue({
-  router,
-  store,
-  render: h => h(App),
+    router,
+    store,
+    render: (h) => h(App),
 }).$mount('#root');

@@ -1,0 +1,30 @@
+@import 'vxe-table/styles/variable.scss';
+
+/* 改变主题色变量 */
+$vxe-primary-color: #5e5dff;
+
+@import 'vxe-table/styles/icon.scss';
+@import 'vxe-table/styles/table.scss';
+@import 'vxe-table/styles/column.scss';
+@import 'vxe-table/styles/header.scss';
+@import 'vxe-table/styles/body.scss';
+@import 'vxe-table/styles/footer.scss';
+@import 'vxe-table/styles/filter.scss';
+@import 'vxe-table/styles/menu.scss';
+@import 'vxe-table/styles/export.scss';
+
+@import 'vxe-table/styles/grid.scss';
+@import 'vxe-table/styles/toolbar.scss';
+@import 'vxe-table/styles/pager.scss';
+@import 'vxe-table/styles/checkbox.scss';
+@import 'vxe-table/styles/radio.scss';
+@import 'vxe-table/styles/input.scss';
+@import 'vxe-table/styles/textarea.scss';
+@import 'vxe-table/styles/button.scss';
+@import 'vxe-table/styles/modal.scss';
+@import 'vxe-table/styles/tooltip.scss';
+@import 'vxe-table/styles/form.scss';
+@import 'vxe-table/styles/select.scss';
+@import 'vxe-table/styles/switch.scss';
+@import 'vxe-table/styles/list.scss';
+@import 'vxe-table/styles/pulldown.scss';
