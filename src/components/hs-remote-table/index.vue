@@ -1,6 +1,5 @@
 <template>
     <vxe-grid
-        class="hs-remote-table"
         align="center"
         size="small"
         border
@@ -11,7 +10,7 @@
         max-height="680"
         show-overflow
         :data="tableData"
-        :loading="loading"
+        :loading="loading && spinning"
         :seq-config="{
             startIndex: (pagerConfig.currentPage - 1) * pagerConfig.pageSize,
         }"
@@ -19,8 +18,8 @@
         :sort-config="{
             remote: true,
             defaultSort: {
-                field: defaultOrderField,
-                order: defaultOrderBy,
+                field: defaultSort.field,
+                order: defaultSort.order,
             },
         }"
         :filter-config="{
@@ -57,7 +56,7 @@ import request from '@src/utils/axios';
 import { defaultPage } from '@src/constants/common';
 
 export default {
-    name: 'HsTable',
+    name: 'HsRemoteTable',
     components: {
         ItemFilter,
     },
@@ -68,27 +67,40 @@ export default {
                 return [];
             },
         },
-        dataApi: String,
-        columnApi: String,
-        defaultOrderField: {
+        api: {
+            type: Object,
+            default() {
+                return {
+                    data: '',
+                    column: '',
+                };
+            },
+        },
+        defaultSort: {
+            type: Object,
+            default() {
+                return {
+                    field: '',
+                    order: '',
+                };
+            },
+        },
+        defaultSearch: {
+            type: Object,
+            default() {
+                return {
+                    key: [],
+                    value: [],
+                };
+            },
+        },
+        fieldType: {
             type: String,
             default: '',
         },
-        defaultOrderBy: {
-            type: String,
-            default: '',
-        },
-        defaultSearchKey: {
-            type: Array,
-            default() {
-                return [];
-            },
-        },
-        defaultSearchValue: {
-            type: Array,
-            default() {
-                return [];
-            },
+        loading: {
+            type: Boolean,
+            default: true,
         },
         tableProps: {
             type: Object,
@@ -96,14 +108,10 @@ export default {
                 return {};
             },
         },
-        fieldType: {
-            type: String,
-            default: '',
-        },
     },
     data() {
         return {
-            loading: true,
+            spinning: true,
             tableData: [],
             pagerConfig: {
                 total: defaultPage.total,
@@ -124,10 +132,8 @@ export default {
                 size: 'small',
             },
             checked: [],
-            searchKey: this.defaultSearchKey,
-            searchValue: this.defaultSearchValue,
-            ascOrDesc: this.defaultOrderBy,
-            orderBy: this.defaultOrderField,
+            search: this.defaultSearch,
+            sort: this.defaultSort,
         };
     },
     mounted() {
@@ -135,34 +141,39 @@ export default {
     },
     methods: {
         fetchData(params) {
-            this.loading = true;
+            this.spinning = true;
             const { currentPage: page, pageSize: limit } = this.pagerConfig;
-            const { searchKey, searchValue, ascOrDesc, orderBy } = this;
+            const {
+                search: { key, value },
+                sort: { field, order },
+            } = this;
             const newParams = {
                 page,
                 limit,
-                searchKey,
-                searchValue,
-                ascOrDesc,
-                orderBy,
+                searchKey: key,
+                searchValue: value,
+                ascOrDesc: order,
+                orderBy: field,
                 ...params,
             };
             newParams.orderBy = this.transformField(newParams.orderBy);
             newParams.searchKey = newParams.searchKey.map((key) => this.transformField(key));
-            return request({ method: 'GET', url: this.dataApi, params: newParams })
+            return request({ method: 'GET', url: this.api.data, params: newParams })
                 .then(({ data, total }) => {
                     this.tableData = data;
                     this.pagerConfig.total = total;
                     this.checked = [];
                 })
                 .finally(() => {
-                    this.loading = false;
+                    this.spinning = false;
                 });
         },
         fetchColumn(key) {
-            const { ascOrDesc, orderBy } = this;
-            const searchKey = cloneDeep(this.searchKey);
-            const searchValue = cloneDeep(this.searchValue);
+            const {
+                sort: { field, order },
+            } = this;
+            const searchKey = cloneDeep(this.search.key);
+            const searchValue = cloneDeep(this.search.value);
 
             // 合并
             const index = searchKey.findIndex((item) => item === key);
@@ -175,15 +186,14 @@ export default {
             searchKey.unshift(key);
             searchValue.unshift([]);
 
-            const newParams = { ascOrDesc, orderBy, searchKey, searchValue };
+            const newParams = { ascOrDesc: order, orderBy: field, searchKey, searchValue };
             newParams.orderBy = this.transformField(newParams.orderBy);
             newParams.searchKey = newParams.searchKey.map((key) => this.transformField(key));
-            return request({ method: 'GET', url: this.columnApi, params: newParams });
+            return request({ method: 'GET', url: this.api.column, params: newParams });
         },
-        handleSortChange({ column, property, order }) {
-            this.ascOrDesc = order;
-            this.orderBy = order ? property : '';
-            return this.fetchData();
+        handleSortChange({ property, order }) {
+            this.sort = { field: order ? property : '', order };
+            this.fetchData();
         },
         handlePageChange({ currentPage, pageSize }) {
             this.pagerConfig.currentPage = currentPage;
@@ -191,25 +201,25 @@ export default {
             this.fetchData();
         },
         handleFilter(key, value) {
-            let index = this.searchKey.findIndex((item) => item === key);
+            let index = this.search.key.findIndex((item) => item === key);
             if (index === -1) {
-                index = this.searchKey.push(key) - 1;
+                index = this.search.key.push(key) - 1;
             }
-            this.searchValue[index] = value;
+            this.search.value[index] = value;
             this.pagerConfig.currentPage = 1;
             this.fetchData();
         },
         getFilterValue(key) {
-            const index = this.searchKey.findIndex((item) => item === key);
+            const index = this.search.key.findIndex((item) => item === key);
             if (index === -1) {
                 return [];
             }
-            return this.searchValue[index];
+            return this.search.value[index];
         },
-        selectAllEvent({ checked, records }) {
+        selectAllEvent({ records }) {
             this.checked = records;
         },
-        selectChangeEvent({ checked, records }) {
+        selectChangeEvent({ records }) {
             this.checked = records;
         },
         transformField(value) {
@@ -222,4 +232,4 @@ export default {
 };
 </script>
 
-<style lang="less"></style>
+<style lang="less" scoped></style>

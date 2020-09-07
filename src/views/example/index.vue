@@ -1,22 +1,29 @@
 <template>
     <div>
         <span>{{ msg }}</span>
-        <HsTable :columns="columns" dataApi="/api/page" columnApi="/api/column">
+        <hs-remote-table :columns="columns" :api="{ data: '/api/page', column: '/api/column' }">
             <template v-slot:slot="{ row }">
                 <span>{{ row }}</span>
             </template>
-        </HsTable>
+        </hs-remote-table>
+        <hs-local-table :columns="columns1" :api="{ data: '/api/list', column: '/api/column' }">
+            <template v-slot:slot="{ row }">
+                <span>{{ row }}</span>
+            </template>
+        </hs-local-table>
     </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import HsTable from '@src/components/hs-table';
+import HsRemoteTable from '@src/components/hs-remote-table';
+import hsLocalTable from '@src/components/hs-local-table';
 
 export default {
     name: 'Example',
     components: {
-        HsTable,
+        'hs-remote-table': HsRemoteTable,
+        'hs-local-table': hsLocalTable,
     },
     data() {
         return {
@@ -39,6 +46,31 @@ export default {
                     field: 'formatter',
                     filterType: 'item',
                     sortable: true,
+                    formatter: ({ cellValue }) => {
+                        return cellValue || '-';
+                    },
+                },
+                { title: 'slot', field: 'slot', slotName: 'slot', width: 100 },
+            ],
+            columns1: [
+                {
+                    width: 60,
+                    type: 'checkbox',
+                    fixed: 'left',
+                },
+                {
+                    title: 'id',
+                    field: 'id',
+                    filterType: 'item',
+                    sortable: true,
+                    'sort-method': (a, b) => a - b,
+                    width: 100,
+                    fixed: 'left',
+                },
+                {
+                    title: 'formatter',
+                    field: 'formatter',
+                    filterType: 'item',
                     formatter: ({ cellValue }) => {
                         return cellValue || '-';
                     },

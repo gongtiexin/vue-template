@@ -27,6 +27,19 @@ module.exports = {
             })
         );
     },
+    [`GET /api/list`]: (req, res) => {
+        return res.json(
+            Mock.mock({
+                status: '200',
+                'data|20': [
+                    {
+                        'id|+1': 1,
+                        status: '',
+                    },
+                ],
+            })
+        );
+    },
     [`GET /api/column`]: (req, res) => {
         return res.json(
             Mock.mock({
