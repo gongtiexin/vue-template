@@ -52,7 +52,6 @@
 <script>
 import ItemFilter from './ItemFilter';
 import { cloneDeep } from 'lodash';
-import request from '@src/utils/axios';
 import { defaultPage } from '@src/constants/common';
 
 export default {
@@ -67,12 +66,12 @@ export default {
                 return [];
             },
         },
-        api: {
+        fetch: {
             type: Object,
             default() {
                 return {
-                    data: '',
-                    column: '',
+                    data: () => Promise.resolve(defaultPage),
+                    column: () => Promise.resolve([]),
                 };
             },
         },
@@ -89,8 +88,8 @@ export default {
             type: Object,
             default() {
                 return {
-                    key: [],
-                    value: [],
+                    keys: [],
+                    values: [],
                 };
             },
         },
@@ -144,23 +143,24 @@ export default {
             this.spinning = true;
             const { currentPage: page, pageSize: limit } = this.pagerConfig;
             const {
-                search: { key, value },
+                search: { keys, values },
                 sort: { field, order },
             } = this;
             const newParams = {
                 page,
                 limit,
-                searchKey: key,
-                searchValue: value,
+                searchKey: keys,
+                searchValue: values,
                 ascOrDesc: order,
                 orderBy: field,
                 ...params,
             };
             newParams.orderBy = this.transformField(newParams.orderBy);
             newParams.searchKey = newParams.searchKey.map((key) => this.transformField(key));
-            return request({ method: 'GET', url: this.api.data, params: newParams })
-                .then(({ data, total }) => {
-                    this.tableData = data;
+            return this.fetch
+                .data(newParams)
+                .then(({ list, total }) => {
+                    this.tableData = list;
                     this.pagerConfig.total = total;
                     this.checked = [];
                 })
@@ -172,8 +172,8 @@ export default {
             const {
                 sort: { field, order },
             } = this;
-            const searchKey = cloneDeep(this.search.key);
-            const searchValue = cloneDeep(this.search.value);
+            const searchKey = cloneDeep(this.search.keys);
+            const searchValue = cloneDeep(this.search.values);
 
             // 合并
             const index = searchKey.findIndex((item) => item === key);
@@ -189,7 +189,7 @@ export default {
             const newParams = { ascOrDesc: order, orderBy: field, searchKey, searchValue };
             newParams.orderBy = this.transformField(newParams.orderBy);
             newParams.searchKey = newParams.searchKey.map((key) => this.transformField(key));
-            return request({ method: 'GET', url: this.api.column, params: newParams });
+            return this.fetch.column(newParams);
         },
         handleSortChange({ property, order }) {
             this.sort = { field: order ? property : '', order };
@@ -201,20 +201,20 @@ export default {
             this.fetchData();
         },
         handleFilter(key, value) {
-            let index = this.search.key.findIndex((item) => item === key);
+            let index = this.search.keys.findIndex((item) => item === key);
             if (index === -1) {
-                index = this.search.key.push(key) - 1;
+                index = this.search.keys.push(key) - 1;
             }
-            this.search.value[index] = value;
+            this.search.values[index] = value;
             this.pagerConfig.currentPage = 1;
             this.fetchData();
         },
         getFilterValue(key) {
-            const index = this.search.key.findIndex((item) => item === key);
+            const index = this.search.keys.findIndex((item) => item === key);
             if (index === -1) {
                 return [];
             }
-            return this.search.value[index];
+            return this.search.values[index];
         },
         selectAllEvent({ records }) {
             this.checked = records;

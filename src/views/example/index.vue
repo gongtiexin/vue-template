@@ -1,12 +1,12 @@
 <template>
     <div>
         <span>{{ msg }}</span>
-        <hs-remote-table :columns="columns" :api="{ data: '/api/page', column: '/api/column' }">
+        <hs-remote-table :columns="columns">
             <template v-slot:slot="{ row }">
                 <span>{{ row }}</span>
             </template>
         </hs-remote-table>
-        <hs-local-table :columns="columns1" :api="{ data: '/api/list', column: '/api/column' }">
+        <hs-local-table :columns="columns1">
             <template v-slot:slot="{ row }">
                 <span>{{ row }}</span>
             </template>

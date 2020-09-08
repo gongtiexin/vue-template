@@ -42,7 +42,6 @@
 <script>
 import ItemFilter from '../hs-remote-table/ItemFilter';
 import { uniqBy } from 'lodash';
-import request from '@src/utils/axios';
 
 export default {
     name: 'HsLocalTable',
@@ -56,11 +55,11 @@ export default {
                 return [];
             },
         },
-        api: {
+        fetch: {
             type: Object,
             default() {
                 return {
-                    data: '',
+                    data: () => Promise.resolve([]),
                 };
             },
         },
@@ -108,7 +107,8 @@ export default {
     methods: {
         fetchData(params) {
             this.spinning = true;
-            return request({ method: 'GET', url: this.api.data, params })
+            return this.fetch
+                .data(params)
                 .then((data) => {
                     this.localData = data;
                     this.checked = [];
