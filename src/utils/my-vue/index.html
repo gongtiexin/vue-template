@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+  </head>
+  <body>
+    <h1 id="name">{{name}}</h1>
+    <script src="./index.js"></script>
+    <script>
+      const element = document.querySelector('#name');
+      const myVue = new MyVue({ name: '...' }, element, 'name');
+
+      window.setTimeout(function () {
+        myVue.data.name = 'Hello, My Vue';
+      }, 2000);
+    </script>
+  </body>
+</html>
