@@ -1,6 +1,4 @@
 const webpack = require('webpack');
-const postcssPresetEnv = require('postcss-preset-env');
-// const InlineManifestWebpackPlugin = require("inline-manifest-webpack-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
@@ -12,6 +10,22 @@ const { merge } = require('webpack-merge');
 const common = require('./webpack.common.js');
 const path = require('./path');
 
+const postcssConfig = {
+  loader: 'postcss-loader',
+  options: {
+    postcssOptions: {
+      plugins: [
+        [
+          'postcss-preset-env',
+          {
+            // Options
+          },
+        ],
+      ],
+    },
+  },
+};
+
 module.exports = merge(common, {
   mode: 'production',
   output: {
@@ -22,30 +36,14 @@ module.exports = merge(common, {
     rules: [
       {
         test: /\.css$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-          {
-            loader: 'postcss-loader',
-            options: {
-              ident: 'postcss',
-              plugins: () => [postcssPresetEnv(/* pluginOptions */)],
-            },
-          },
-        ],
+        use: [MiniCssExtractPlugin.loader, 'css-loader', postcssConfig],
       },
       {
         test: /\.less$/,
         use: [
           MiniCssExtractPlugin.loader,
           'css-loader',
-          {
-            loader: 'postcss-loader',
-            options: {
-              ident: 'postcss',
-              plugins: () => [postcssPresetEnv(/* pluginOptions */)],
-            },
-          },
+          postcssConfig,
           {
             loader: 'less-loader',
             options: {
@@ -68,13 +66,7 @@ module.exports = merge(common, {
         use: [
           MiniCssExtractPlugin.loader,
           'css-loader',
-          {
-            loader: 'postcss-loader',
-            options: {
-              ident: 'postcss',
-              plugins: () => [postcssPresetEnv(/* pluginOptions */)],
-            },
-          },
+          postcssConfig,
           {
             loader: 'sass-loader',
           },
